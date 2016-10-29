@@ -5,10 +5,14 @@ var path = require("path");
 var list = require('./request.js').Request;
 var logger = require("morgan");
 
+<<<<<<< HEAD
 //var request_1 = require('superagent');
+=======
+
+>>>>>>> 08fd69e7833b877ad926074952da059a8d0d4825
 
 app.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/views/index.html'));
+  res.sendFile(path.join(__dirname+'/index.html'));
   //__dirname : It will resolve to your project folder.
 });
 
@@ -20,6 +24,7 @@ app.get('/sitemap',function(req,res){
   res.sendFile(path.join(__dirname+'/views/sitemap.html'));
 });
 
+<<<<<<< HEAD
 /*
 app.get('/request', function(req, response){
     // run your request.js script
@@ -31,12 +36,66 @@ app.get('/request', function(req, response){
 	    console.log(res.status);
 	    console.log(res.body); //do something
 	});
+=======
+app.get('/lib/require-jquery.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/require-jquery.js'));
+});
 
+
+app.get('/lib/atm.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/atm.js'));
+});
+>>>>>>> 08fd69e7833b877ad926074952da059a8d0d4825
+
+app.get('/lib/capital_one.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/capital_one.js'));
 });
 */
 
 app.get("*", function(request, response) {
-  response.end("Saaale galat URL hai ye");
+  response.end("Wrong URL!!");
+});
+
+
+app.get('/lib/account.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/account.js'));
+});
+
+
+app.get('/lib/bills.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/bills.js'));
+});
+
+
+app.get('/lib/branch.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/branch.js'));
+});
+
+
+app.get('/lib/customer.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/customer.js'));
+});
+
+
+app.get('/lib/deposit.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/deposit.js'));
+});
+
+
+app.get('/lib/merchant.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/merchant.js'));
+});
+
+app.get('/lib/purchase.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/purchase.js'));
+});
+
+app.get('/lib/transfer.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/transfer.js'));
+});
+
+app.get('/lib/withdrawal.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/withdrawal.js'));
 });
 
 http.createServer(app).listen(1337);
