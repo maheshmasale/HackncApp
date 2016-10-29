@@ -2,19 +2,31 @@
 <head>
   <title>Express HTML</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script data-main="lib/capital_one" src="lib/require-jquery.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
         $('#fetchData').click(function() {
             // run an AJAX get request to the route you setup above...
             // respect the cross-domain policy by using the same domain
             // you used to access your index.html file!
-            $.get('/request', function(list) {
+            /*$.get('/request', function(list) {
                 alert(list);
                 //$('#response').html(list);
-            });
+            });*/
         });
     });
 
+    $(function(){
+        require(['atm'], function (atm) {
+            var apikey = '4495856d0c2b6947ae81b8ab48802308';
+            atmDemo(apikey, atm);
+        });
+    });
+    function accountDemo (apikey, atm) {
+        console.log('Account Demo');
+        var bankAtms = atm.initWithKey(apikey);
+        console.log("[Account - Get All] : Sample Account Nickname: (" + bankAtms.getAll()[0] + ")");
+    }
 /*
     function fetchData(argument) {
       console.log("calledFetchedData") 
