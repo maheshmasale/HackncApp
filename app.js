@@ -31,6 +31,11 @@ app.get('/lib/require-jquery.js',function(req,res){
   res.sendFile(path.join(__dirname+'/lib/require-jquery.js'));
 });
 
+
+app.get('/lib/atm.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/lib/atm.js'));
+});
+
 app.get('/lib/account.js',function(req,res){
   res.sendFile(path.join(__dirname+'/lib/account.js'));
 });
