@@ -13,17 +13,44 @@
           atm = atm_inp
 
       });
-
+    $('#fetchData').click(function() {
+      console.log(atmDemo());
+    });
     });
     
-    $('#fetchData').click(function() {
-      atmDemo();
-    });
+    
     function atmDemo() {
       console.log('Atm Demo');
-      var bankAtms = atm.initWithKey("4495856d0c2b6947ae81b8ab48802308");
-      console.log(bankAtms.getAll()[0]);
+      //var bankAtms = atm.initWithKey("4495856d0c2b6947ae81b8ab48802308");
+
+      Config = require('capital_one');
+      var atmslist = [];
+      var continueFetching = true;
+      var nextPage = "/atms?key=4495856d0c2b6947ae81b8ab48802308"
+
+      while(continueFetching)
+      {
+        var request = $.ajax({ url: Config.baseUrl+nextPage, 
+        //data: 'key='+"4495856d0c2b6947ae81b8ab48802308", 
+        async: false,
+        dataType: 'json'});
+
+        request.complete(function(results) {
+          if(results.responseJSON.data.length < 2)
+          {
+              continueFetching = false;
+          }
+          nextPage = results.responseJSON.paging.next;
+          for(i =0; i < results.responseJSON.data.length; i++){
+            atmslist.push(results.responseJSON.data[i]);
+          }
+
+        });
+        
+      }
+      return atmslist;
     }  
+
   </script>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
