@@ -5,11 +5,8 @@ var path = require("path");
 var list = require('./request.js').Request;
 var logger = require("morgan");
 
-<<<<<<< HEAD
-//var request_1 = require('superagent');
-=======
 
->>>>>>> 08fd69e7833b877ad926074952da059a8d0d4825
+//var request_1 = require('superagent');
 
 app.get('/',function(req,res){
   res.sendFile(path.join(__dirname+'/index.html'));
@@ -24,7 +21,6 @@ app.get('/sitemap',function(req,res){
   res.sendFile(path.join(__dirname+'/views/sitemap.html'));
 });
 
-<<<<<<< HEAD
 /*
 app.get('/request', function(req, response){
     // run your request.js script
@@ -33,9 +29,9 @@ app.get('/request', function(req, response){
     //res.send(list.getList()); // try res.json() if getList() returns an object or array
     console.log("called");
     request_1.get('http://api.reimaginebanking.com/atms?key=4495856d0c2b6947ae81b8ab48802308').end(function(res){
-	    console.log(res.status);
-	    console.log(res.body); //do something
-	});
+      console.log(res.status);
+      console.log(res.body); //do something
+  });
 =======
 app.get('/lib/require-jquery.js',function(req,res){
   res.sendFile(path.join(__dirname+'/lib/require-jquery.js'));
