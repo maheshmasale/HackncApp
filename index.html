@@ -3,59 +3,27 @@
   <title>Express HTML</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
-  <script data-main="lib/capital_one" src="lib/require-jquery.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-        $('#fetchData').click(function() {
-            // run an AJAX get request to the route you setup above...
-            // respect the cross-domain policy by using the same domain
-            // you used to access your index.html file!
-            /*$.get('/request', function(list) {
-                alert(list);
-                //$('#response').html(list);
-            });*/
-
   <script data-main="/lib/capital_one.js" src="/lib/require-jquery.js"></script>
+
   <script type="text/javascript">
-  $(document).ready(function() {
-    
+
+    $(document).ready(function() {
+
     require(['atm'], function (atm_inp) {
-            atm = atm_inp
+          atm = atm_inp
 
-        });
-    function atmDemo() {
-        console.log('Atm Demo');
-        var bankAtms = atm.initWithKey("4495856d0c2b6947ae81b8ab48802308");
-        console.log(bankAtms.getAll()[0]);
-    }  
-    $('#fetchData').click(function() {
-        atmDemo();
       });
-  });
 
-    $(function(){
-        require(['atm'], function (atm) {
-            var apikey = '4495856d0c2b6947ae81b8ab48802308';
-            atmDemo(apikey, atm);
-        });
     });
-    function accountDemo (apikey, atm) {
-        console.log('Account Demo');
-        var bankAtms = atm.initWithKey(apikey);
-        console.log("[Account - Get All] : Sample Account Nickname: (" + bankAtms.getAll()[0] + ")");
-    }
-/*
-    function fetchData(argument) {
-      console.log("calledFetchedData") 
-      $.ajax({
-          url: 'api.reimaginebanking.com/atms?key=4495856d0c2b6947ae81b8ab48802308',
-          success: function(results){
-              console.log(results);
-              alert("results" + results) ;
-          }
-      });
-
-    }*/
+    
+    $('#fetchData').click(function() {
+      atmDemo();
+    });
+    function atmDemo() {
+      console.log('Atm Demo');
+      var bankAtms = atm.initWithKey("4495856d0c2b6947ae81b8ab48802308");
+      console.log(bankAtms.getAll()[0]);
+    }  
   </script>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
