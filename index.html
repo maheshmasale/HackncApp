@@ -11,7 +11,8 @@
    <!-- Load the Esri Leaflet plugin from CDN.  For more info: http://esri.github.io/esri-leaflet/examples/ -->
   <script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
 
-
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="https://unpkg.com/esri-leaflet@2.0.4"></script>
 
   <script type="text/javascript">
 
@@ -23,7 +24,7 @@
       
       $('#fetchData').click(function() {
        
-        var map = L.map('map').setView([38, -77], 10); 
+        var map = L.map('map').setView([38.89, -77.12], 9); 
 
         //Adds a basemap to the map.  To see all the available basemaps: http://esri.github.io/esri-leaflet/api-reference/layers/basemap-layer.html
         L.esri.basemapLayer('Streets').addTo(map);
@@ -60,7 +61,7 @@
                //Create Bike Icon Marker
               var marker = L.marker(latlng,{icon: bikeIcon});
                 //To show the fields in your data, replace the field names in the {} to match your data
-              marker.bindPopup(feature.properties.name + '<br/>' + feature.properties.address + '<br/>' + feature.properties.hours);
+              marker.bindPopup("Name : "+feature.properties.name + '<br/>'+"Address : " + feature.properties.address + '<br/>'+"Hours : " + feature.properties.hours);
               return marker;
               }
                //add data layer containing bike crash data to the map
@@ -129,7 +130,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-  <div style="margin:100px;">
+  <div >
     <nav class="navbar navbar-inverse navbar-static-top">
   <div class="container">
     <a class="navbar-brand" href="/">Express HTML</a>
