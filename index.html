@@ -2,7 +2,6 @@
 <head>
   <title>Express HTML</title>
  
-  <script data-main="/lib/capital_one.js" src="/lib/require-jquery.js"></script>
 
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
    <!-- Load the Leaflet from CDN. More info at: http://leafletjs.com/examples/quick-start.html-->
@@ -16,38 +15,45 @@
 
   <script type="text/javascript">
 
-    $(document).ready(function() {
+   /* $(document).ready(function() {
 
-    require(['atm'], function (atm_inp) {
+    //require(['atm'], function (atm_inp) {
           atm = atm_inp
 
-      });
+      });*/
       $('#fetchData').click(function() {
-        var data = atmDemo()
-//Create bike icon to style points
-var dollarIcon = L.icon({
-//Replace URL on the next line to point to your icon
-iconUrl : 'https://cdn0.iconfinder.com/data/icons/shift-free/32/Currency_dollar-16.png',
-iconSize : [8, 16]
-});
-// add GeoJSON layer to the map once the file is loaded
-L.geoJson(data, {
-pointToLayer : function (feature, latlng) {
-//Create Bike Icon Marker
-var marker = L.marker(latlng, {
-icon : dollarIcon
-});
-//To show the fields in your data, replace the field names in the {} to match your data
-marker.bindPopup("Name :" + feature.properties.name + '<br/>' + "Hours : " + feature.properties.hours + '<br/>' + "Address : " + feature.properties.address);
-return marker;
+        var map = L.map('map').setView([35.9886, -78.9072], 10); 
+
+//Adds a basemap to the map.  To see all the available basemaps: http://esri.github.io/esri-leaflet/api-reference/layers/basemap-layer.html
+L.esri.basemapLayer('NationalGeographic').addTo(map);
+
+// load GeoJSON from an external file.  
+//Replace URL below to point to your GeoJSON
+$.getJSON("https://s3-us-west-2.amazonaws.com/s.cdpn.io/131702/north_carolina_bicycle_crash_data_heatmap__(1).geojson", function(data) {
+  //Create bike icon to style points
+    var bikeIcon = L.icon({
+      //Replace URL on the next line to point to your icon
+    iconUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/131702/bikeCrash.png',
+    iconSize: [60,50]
+  });
+  // add GeoJSON layer to the map once the file is loaded
+   L.geoJson(data,{
+ pointToLayer: function(feature,latlng){
+   //Create Bike Icon Marker
+  var marker = L.marker(latlng,{icon: bikeIcon});
+    //To show the fields in your data, replace the field names in the {} to match your data
+  marker.bindPopup(feature.properties.crash_date + '<br/>' + feature.properties.bike_sex + '<br/>' + feature.properties.crash_type);
+  return marker;
 }
-//add data layer containing bike crash data to the map
-}).addTo(map);
-      });
-    });
+     //add data layer containing bike crash data to the map
+  }).addTo(map);
+})});
+
+
+
+
     
-    
-    function atmDemo() {
+    /*function atmDemo() {
       console.log('Atm Demo');
       //var bankAtms = atm.initWithKey("4495856d0c2b6947ae81b8ab48802308");
 
@@ -95,11 +101,8 @@ return marker;
       }
      
       return atmslist;
-    }
-    function function_name(argument) {
-        // body...
-      }  
-
+    }*/
+    
   </script>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
