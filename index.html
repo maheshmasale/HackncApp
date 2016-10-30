@@ -1,16 +1,19 @@
 <html>
 <head>
   <title>ATM position</title>
- 
-
+ <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<!--
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-   <!-- Load the Leaflet from CDN. More info at: http://leafletjs.com/examples/quick-start.html-->
+  
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-   <!-- Load jQuery from CDN. jQuery is used to put the GeoJSON points on the map-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-   <!-- Load the Esri Leaflet plugin from CDN.  For more info: http://esri.github.io/esri-leaflet/examples/ -->
-  <script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
+   
+  
+   
+  <script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>-->
 
+  <!-- Load Leaflet from CDN-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.0.0/dist/leaflet-src.js"></script>
   <!-- Load Esri Leaflet from CDN -->
   <script src="https://unpkg.com/esri-leaflet@2.0.4"></script>
 
@@ -40,25 +43,13 @@
               iconUrl: 'https://cdn0.iconfinder.com/data/icons/shift-free/32/Currency_dollar-24.png',
               iconSize: [12,24]
             });
-            
 
             /*
-            var temp = data.responseJSON;
-            for(var j =0; j < temp.features.length;j++)
-            {
-              temp_data = temp.features[j].geometry.coordinates[0];
-              temp.features[j].geometry.coordinates[0] = temp.features[j].geometry.coordinates[1];
-              temp.features[j].geometry.coordinates[1] = temp_data;
-            }
-            console.log(JSON.stringify(temp));
-            */
-
-
-
             // add GeoJSON layer to the map once the file is loaded
             L.geoJson(data.responseJSON,{
               pointToLayer: function(feature,latlng){
                //Create Bike Icon Marker
+
               var marker = L.marker(latlng,{icon: bikeIcon});
                 //To show the fields in your data, replace the field names in the {} to match your data
               marker.bindPopup("Name : "+feature.properties.name + '<br/>'+"Address : " + feature.properties.address + '<br/>'+"Hours : " + feature.properties.hours);
@@ -66,6 +57,44 @@
               }
                //add data layer containing bike crash data to the map
             }).addTo(map);
+            */
+
+            
+            var jsonData = data.responseJSON
+
+
+
+            var stops = L.esri.featureLayer({
+              url: 'https://services.arcgis.com/rOo16HdIMeOBI4Mb/arcgis/rest/services/Trimet_Transit_Stops/FeatureServer/0',
+                pointToLayer: function (GeoJSON, latlng) {
+                  return L.circleMarker(latlng);
+                },
+              style:{
+                color: '#5B7CBA',
+                weight: 2,
+                opacity: 0.85,
+                fillOpacity: 0.5
+              }
+            }).addTo(map);
+
+            var previousIds = [];
+            map.on('click', function(e){
+              stops.query().nearby(e.latlng, 500).ids(function(error, ids){
+                for (var j = 0; j < previousIds.length; j++) {
+                  stops.resetStyle(previousIds[j]);
+                }
+                previousIds = ids;
+                for (var i = 0; i < ids.length; i++) {
+                  stops.setFeatureStyle(ids[i], {
+                    color: '#BA454E',
+                    weight: 2,
+                    opacity: 0.85,
+                    fillOpacity: 0.5
+                  });
+                }
+              });
+            });
+
         });
       });
     });
