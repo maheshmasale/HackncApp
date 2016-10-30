@@ -2,8 +2,9 @@
 <head>
   <title>Express HTML</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-
+ 
   <script data-main="/lib/capital_one.js" src="/lib/require-jquery.js"></script>
+
 
   <script type="text/javascript">
 
@@ -42,12 +43,30 @@
           }
           nextPage = results.responseJSON.paging.next;
           for(i =0; i < results.responseJSON.data.length; i++){
-            atmslist.push(results.responseJSON.data[i]);
-          }
+           var tempData = results.responseJSON.data[i];
+
+           atmslist.push({
+             "geometry":{
+               "type":"Point",
+               "coordinates":[
+                 tempData.geocode.lat,
+                 tempData.geocode.lng
+               ]
+             },
+             "properties":{
+               "id": tempData._id,
+               "amount_left" : tempData.amount_left,
+               "name": tempData.name,
+               "hours" : tempData.hours[0],
+               "address": tempData.address.street_number + " "+ tempData.address.street_name + ", " + tempData.address.city + ", " + tempData.address.state
+             }
+           });
+         }
 
         });
         
       }
+     
       return atmslist;
     }
     function function_name(argument) {
@@ -80,6 +99,7 @@
 </nav>
     <div class="jumbotron"  style="padding:40px;">
       <button id="fetchData" class="btn btn-primary btn-lg" >Fetch</button>
+      <div id ="map" height:200px width:500px></div> 
     </div>
   </div>
 </body>
