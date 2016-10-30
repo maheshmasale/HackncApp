@@ -1,9 +1,17 @@
 <html>
 <head>
   <title>Express HTML</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
  
   <script data-main="/lib/capital_one.js" src="/lib/require-jquery.js"></script>
+
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+   <!-- Load the Leaflet from CDN. More info at: http://leafletjs.com/examples/quick-start.html-->
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+   <!-- Load jQuery from CDN. jQuery is used to put the GeoJSON points on the map-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+   <!-- Load the Esri Leaflet plugin from CDN.  For more info: http://esri.github.io/esri-leaflet/examples/ -->
+  <script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
+
 
 
   <script type="text/javascript">
@@ -15,7 +23,26 @@
 
       });
       $('#fetchData').click(function() {
-        console.log(atmDemo());
+        var data = atmDemo()
+//Create bike icon to style points
+var dollarIcon = L.icon({
+//Replace URL on the next line to point to your icon
+iconUrl : 'https://cdn0.iconfinder.com/data/icons/shift-free/32/Currency_dollar-16.png',
+iconSize : [8, 16]
+});
+// add GeoJSON layer to the map once the file is loaded
+L.geoJson(data, {
+pointToLayer : function (feature, latlng) {
+//Create Bike Icon Marker
+var marker = L.marker(latlng, {
+icon : dollarIcon
+});
+//To show the fields in your data, replace the field names in the {} to match your data
+marker.bindPopup("Name :" + feature.properties.name + '<br/>' + "Hours : " + feature.properties.hours + '<br/>' + "Address : " + feature.properties.address);
+return marker;
+}
+//add data layer containing bike crash data to the map
+}).addTo(map);
       });
     });
     
