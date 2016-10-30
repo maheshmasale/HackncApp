@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Express HTML</title>
+  <title>ATM position</title>
  
 
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
@@ -22,29 +22,45 @@
     */
       
       $('#fetchData').click(function() {
-        alert("getting calls");
-
-        var map = L.map('map').setView([35.9886, -78.9072], 10); 
+       
+        var map = L.map('map').setView([38, -77], 10); 
 
         //Adds a basemap to the map.  To see all the available basemaps: http://esri.github.io/esri-leaflet/api-reference/layers/basemap-layer.html
-        L.esri.basemapLayer('NationalGeographic').addTo(map);
+        L.esri.basemapLayer('Streets').addTo(map);
 
-        // load GeoJSON from an external file.  
-        //Replace URL below to point to your GeoJSON
-        $.getJSON("https://s3-us-west-2.amazonaws.com/s.cdpn.io/131702/north_carolina_bicycle_crash_data_heatmap__(1).geojson", function(data) {
+        var request = $.ajax({ url: '/capitalOneDownloadedData.txt',
+        dataType: 'json'});
+        
+        request.complete(function(data) {
+
             //Create bike icon to style points
               var bikeIcon = L.icon({
                 //Replace URL on the next line to point to your icon
-              iconUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/131702/bikeCrash.png',
-              iconSize: [60,50]
+              iconUrl: 'https://cdn0.iconfinder.com/data/icons/shift-free/32/Currency_dollar-24.png',
+              iconSize: [12,24]
             });
+            
+
+            /*
+            var temp = data.responseJSON;
+            for(var j =0; j < temp.features.length;j++)
+            {
+              temp_data = temp.features[j].geometry.coordinates[0];
+              temp.features[j].geometry.coordinates[0] = temp.features[j].geometry.coordinates[1];
+              temp.features[j].geometry.coordinates[1] = temp_data;
+            }
+            console.log(JSON.stringify(temp));
+            */
+
+
+
             // add GeoJSON layer to the map once the file is loaded
-            L.geoJson(data,{
+            L.geoJson(data.responseJSON,{
               pointToLayer: function(feature,latlng){
                //Create Bike Icon Marker
               var marker = L.marker(latlng,{icon: bikeIcon});
                 //To show the fields in your data, replace the field names in the {} to match your data
-              marker.bindPopup(feature.properties.crash_date + '<br/>' + feature.properties.bike_sex + '<br/>' + feature.properties.crash_type);
+              marker.bindPopup(feature.properties.name + '<br/>' + feature.properties.address + '<br/>' + feature.properties.hours);
               return marker;
               }
                //add data layer containing bike crash data to the map
@@ -132,7 +148,7 @@
 </nav>
     <div class="jumbotron"  style="padding:40px;">
       <button id="fetchData" class="btn btn-primary btn-lg" >Fetch</button>
-      <div id ="map" style="height: 200px; width: 500px"></div> 
+      <div id ="map" style="height: 400px; width: 1000px;"></div> 
     </div>
   </div>
 </body>
