@@ -24,6 +24,12 @@
     /*require(['atm'], function (atm_inp) {
           atm = atm_inp
     */
+      populationMatrix = {};
+      var request = $.ajax({ url: '/mapPopulation.txt', dataType: 'json'});
+      request.complete(function(data) {
+        populationMatrix = data.responseJSON;
+        //console.log(JSON.stringify(populationMatrix));
+      });
       
       $('#fetchData').click(function() {
        
@@ -59,34 +65,64 @@
             }).addTo(map);
             */
 
-            
-            var jsonData = data.responseJSON
-
-
 
             var stops = L.esri.featureLayer({
-              url: 'https://services.arcgis.com/rOo16HdIMeOBI4Mb/arcgis/rest/services/Trimet_Transit_Stops/FeatureServer/0',
-                pointToLayer: function (GeoJSON, latlng) {
+              url: 'https://services7.arcgis.com/GVocJxmm3lzVLM7R/arcgis/rest/services/latLong/FeatureServer/0',
+                pointToLayer: function (geojson, latlng) {
                   return L.circleMarker(latlng);
                 },
               style:{
-                color: '#5B7CBA',
+                color: '#C00',
                 weight: 2,
-                opacity: 0.85,
+                opacity: 0.45,
                 fillOpacity: 0.5
               }
             }).addTo(map);
 
             var previousIds = [];
             map.on('click', function(e){
-              stops.query().nearby(e.latlng, 500).ids(function(error, ids){
+              var lat = e.latlng.lat;
+              var lng = e.latlng.lng;
+              var distanceRadius = getDistanceRadi(lat,lng);
+              document.getElementById("lat").innerText = lat
+              document.getElementById("lng").innerText = lng
+
+              document.getElementById("distanceRadius").innerText = distanceRadius
+              if(distanceRadius == 250)
+              {
+                document.getElementById("pop").innerText = "> 7500";
+              }
+              else
+              {
+                if(distanceRadius == 500)
+                {
+                  document.getElementById("pop").innerText = "5000 - 7500";
+                }
+                else
+                {
+                  if(distanceRadius == 750)
+                  {
+                    document.getElementById("pop").innerText = "2500 - 5000";
+                  }
+                  else
+                  {
+                    document.getElementById("pop").innerText = "< 2500";
+                  }
+                }
+              }
+
+
+              stops.query().nearby(e.latlng, distanceRadius).ids(function(error, ids){
                 for (var j = 0; j < previousIds.length; j++) {
                   stops.resetStyle(previousIds[j]);
                 }
+                document.getElementById("amtCount").innerText = ids.length;
+                
                 previousIds = ids;
+                
                 for (var i = 0; i < ids.length; i++) {
                   stops.setFeatureStyle(ids[i], {
-                    color: '#BA454E',
+                    color: '#00897b',
                     weight: 2,
                     opacity: 0.85,
                     fillOpacity: 0.5
@@ -99,7 +135,19 @@
       });
     });
 
-
+   function getDistanceRadi(lat,lng) {
+      j = 0, diffrence_dist = 99999999;
+      for(var i=0; i < populationMatrix.length; i ++)
+      {
+        //var temp_dist = (populationMatrix[i][0] - lat)*(populationMatrix[i][0] - lat) + (populationMatrix[i][1] - long)(populationMatrix[i][1] - long);
+        var temp_dist = Math.sqrt(Math.pow((populationMatrix[i][0] - lat), 2) + Math.pow((populationMatrix[i][1] - lng), 2));
+        if (temp_dist < diffrence_dist) {
+          diffrence_dist = temp_dist;
+          j = i;
+        }
+      }
+      return  populationMatrix[j][2];
+   }
 
     
     function atmDemo() {
@@ -179,6 +227,21 @@
     <div class="jumbotron"  style="padding:40px;">
       <button id="fetchData" class="btn btn-primary btn-lg" >Fetch</button>
       <div id ="map" style="height: 400px; width: 1000px;"></div> 
+      <br/>
+      <div>
+        <label> Latitude : </label>
+        <label id="lat"></label> 
+        <label> Longitude : </label>
+        <label id="lng"></label>
+        <label> Population :</label>
+        <label id="pop"></label>
+        <label> Predicted Distance :</label>
+        <label id="distanceRadius">0</label>
+      </div>
+      <div>
+        <label> # of ATMs in vicinity : </label>
+        <label id="amtCount"></label> 
+      </div>
     </div>
   </div>
 </body>

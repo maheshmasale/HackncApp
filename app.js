@@ -35,6 +35,10 @@ app.get('/capitalOneDownloadedData.txt',function(req,res){
   res.sendFile(path.join(__dirname+'/capitalOneDownloadedData.txt'));
 });
 
+app.get('/mapPopulation.txt',function(req,res){
+  res.sendFile(path.join(__dirname+'/mapPopulation.txt'));
+});
+
 
 app.get('/lib/atm.js',function(req,res){
   res.sendFile(path.join(__dirname+'/lib/atm.js'));
